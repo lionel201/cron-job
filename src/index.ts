@@ -1,7 +1,7 @@
 import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
 import cron from "node-cron";
-import {handleAuto} from "./controllers";
+import {claimReward, handleAuto} from "./controllers";
 import {CronExpression} from '@nestjs/schedule';
 import {Account, Ed25519PrivateKey, InputGenerateTransactionPayloadData} from "@aptos-labs/ts-sdk";
 import path from "path";
@@ -45,7 +45,8 @@ app.get('/send', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/generate', (req: Request, res: Response) => {
+app.get('/generate', async (req: Request, res: Response) => {
+  await handleAuto()
   // const filePath = path.resolve('./data', 'wallet.json');
   // const wallets = []
   // for (let i = 0; i < 100; i++) {
@@ -64,8 +65,8 @@ app.get('/generate', (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  const task = cron.schedule(CronExpression.EVERY_MINUTE, () => {
-    handleAuto()
+  const task = cron.schedule(CronExpression.EVERY_SECOND, () => {
+    claimReward()
   }, {
     scheduled: false
   });

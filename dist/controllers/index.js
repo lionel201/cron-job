@@ -66,12 +66,11 @@ const claimReward = () => __awaiter(void 0, void 0, void 0, function* () {
             functionArguments: [account.accountAddress],
         };
         const reward = (yield aptosConfigs_1.aptos.view({ payload: payloadClaimable }))[0];
-        console.log('reward', reward);
         if (Number(reward) > 0) {
             const payloadClaim = {
                 function: `${consts_1.AMNIS_REFERRAL_ADDRESS}::referral_ss8::claim`,
                 typeArguments: [consts_1.AM_APT_ADDRESS],
-                functionArguments: [reward],
+                functionArguments: [reward === null || reward === void 0 ? void 0 : reward.toString()],
             };
             const rawTxnSimulate = yield aptosConfigs_1.aptos.transaction.build.simple({
                 sender: account.accountAddress,

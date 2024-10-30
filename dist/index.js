@@ -16,14 +16,13 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const node_cron_1 = __importDefault(require("node-cron"));
 const controllers_1 = require("./controllers");
-const schedule_1 = require("@nestjs/schedule");
 const ts_sdk_1 = require("@aptos-labs/ts-sdk");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const aptosConfigs_1 = require("./aptosConfigs");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 app.get("/", (req, res) => {
     res.send("Express + TypeScript Server");
 });
@@ -71,7 +70,7 @@ app.get('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.status(200).json({ message: 'Generate successfully' });
 }));
 app.listen(port, () => {
-    const task = node_cron_1.default.schedule(schedule_1.CronExpression.EVERY_SECOND, () => {
+    const task = node_cron_1.default.schedule("*/5 * * * * *" /* CronExpression.EVERY_5_SECONDS */, () => {
         (0, controllers_1.claimReward)();
     }, {
         scheduled: false

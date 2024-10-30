@@ -2,18 +2,17 @@ import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
 import cron from "node-cron";
 import {claimReward, handleAuto} from "./controllers";
-import {CronExpression} from '@nestjs/schedule';
 import {Account, Ed25519PrivateKey, InputGenerateTransactionPayloadData} from "@aptos-labs/ts-sdk";
 import path from "path";
 import fs from "fs";
-import {HexString} from "aptos";
 import {aptos} from "./aptosConfigs";
 import {Wallet} from "./types";
+import {CronExpression} from "./consts";
 
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
@@ -65,7 +64,7 @@ app.get('/generate', async (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  const task = cron.schedule(CronExpression.EVERY_SECOND, () => {
+  const task = cron.schedule(CronExpression.EVERY_5_SECONDS, () => {
     claimReward()
   }, {
     scheduled: false

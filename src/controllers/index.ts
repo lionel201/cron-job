@@ -51,15 +51,13 @@ export const claimReward = async () => {
      typeArguments: [AM_APT_ADDRESS],
      functionArguments: [account.accountAddress],
    }
-
    const reward = (await aptos.view({ payload:payloadClaimable }))[0];
-   console.log('reward',reward)
 
    if(Number(reward) > 0){
      const payloadClaim: any = {
        function: `${AMNIS_REFERRAL_ADDRESS}::referral_ss8::claim`,
        typeArguments: [AM_APT_ADDRESS],
-       functionArguments: [reward],
+       functionArguments: [reward?.toString()],
      }
 
      const rawTxnSimulate = await aptos.transaction.build.simple({
